@@ -7,14 +7,15 @@ from transformer import Transformer
 if __name__ == "__main__":
 
     enc_inputs, dec_inputs, dec_outputs = make_data()
-    loader = Data.DataLoader(MyDataSet(enc_inputs, dec_inputs, dec_outputs), 2, True)
+    loader = Data.DataLoader(MyDataSet(enc_inputs, dec_inputs, dec_outputs), 20, True)
 
     #torch.backends.cudnn.enable =True
     #torch.backends.cudnn.benchmark = True
 
-    model = Transformer().cuda()
+    #model = Transformer().cuda()
+    model = torch.load('model.pth')
     criterion = nn.CrossEntropyLoss(ignore_index=0)         # 忽略 占位符 索引为0.
-    optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.99)
+    optimizer = optim.SGD(model.parameters(), lr=1e-10, momentum=0.99)
 
     for epoch in range(1000):
         for enc_inputs, dec_inputs, dec_outputs in loader:  # enc_inputs : [batch_size, src_len]
